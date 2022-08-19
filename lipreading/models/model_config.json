@@ -1,0 +1,25 @@
+{
+    "models": [
+        {
+            "modelName": "20-words-120-epochs.tar",
+            "displayName": "Final 20 words model (trained for 120 epochs)",
+            "configFile": "lrw_resnet18_mstcn.json",
+            "wordsList": "20WordsSortedList.txt",
+            "numClasses": 20
+        },
+        {
+            "modelName": "lrw_resnet18_mstcn_adamw_s3.pth.tar",
+            "displayName": "Pre-trained 500 word model",
+            "configFile": "lrw_resnet18_mstcn.json",
+            "wordsList": "500WordsSortedList.txt",
+            "numClasses": 500
+        },
+        {
+            "modelName": "initial-10-words-model.tar",
+            "displayName": "Initial 10 words model",
+            "configFile": "lrw_resnet18_mstcn.json",
+            "wordsList": "10WordsSortedList.txt",
+            "numClasses": 500
+        }
+    ]
+}
