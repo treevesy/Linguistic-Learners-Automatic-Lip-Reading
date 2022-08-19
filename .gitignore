@@ -2,7 +2,6 @@ example_venv/
 web_venv/
 useless/
 node_modules/
-models/
 package-lock.json
 __pycache__
 .DS_STORE
