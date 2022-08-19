@@ -1,0 +1,12 @@
+{
+    "backbone_type": "alexnet",
+    "relu_type": "relu",
+    "tcn_dropout": 0.2,
+    "tcn_dwpw": false,
+    "tcn_kernel_size": [
+        3
+    ],
+    "tcn_num_layers": 9,
+    "tcn_width_mult": 1,
+    "width_mult": 1.0
+}
