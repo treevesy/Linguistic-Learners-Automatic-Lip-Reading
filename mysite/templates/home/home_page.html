@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block extra_css %}
+    <style>
+      body{
+        padding-top: 100px;
+      }
+    </style>
+{% endblock %}
+{% load wagtailcore_tags wagtailimages_tags %}
+<div class="container">
+{% block content %}
+
+  {% image self.banner_image width-1500 as img %}
+
+  <center><h1 class="display-4">{{ self.banner_title }}</h1></center>
+  <center><div class="lead">
+    <h4>{{ self.banner_subtitle|richtext }}</h4>
+    <br>
+    <img src="{{ img.url }}" class="d-block w-100" alt="{{ img.alt }}">
+    <br><br><br>
+    <h3>What does our web application do?</h3>
+    <h4>
+    <p data-block-key="lplyw">
+      Linguistic Learners takes the frames of a video containing a persons face and creates facial landmarks from these frames.
+      From there we use temporal convolutional networks to detect the persons mouth moving over time.
+      After we have these frames we can then predict the word being spoken using a machine learning model with the ResNet-34 as the base architecture.
+    </p>
+  </div></center>
+
+  <br>
+  {# Example of an Orderable from home/models.py #}
+  <div class="container-fluid">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for loop_cycle in self.carousel_images.all %}
+                {% image loop_cycle.carousel_image height-600 as img %}
+                <div class="carousel-item{% if forloop.counter == 1 %} active{% endif %}">
+                    <img src="{{ img.url }}" class="d-block w-100" alt="{{ img.alt }}">
+                </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+  </div>
+<br><br>
+  <div class="container">
+    <!-- <center><h4 class=" ">Random cards to display some information like features or something</h4></center> -->
+    <br>
+    {% for block in page.contentCard %}
+
+      {% include_block block %}
+
+    {% endfor %}
+  </div>
+
+{% endblock %}
+</div>

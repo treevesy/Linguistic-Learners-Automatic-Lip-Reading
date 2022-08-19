@@ -1,0 +1,465 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block extra_css %}
+    <style>
+      body{
+        padding-top: 100px;
+      }
+      .alert {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        opacity: 1;
+        transition: opacity 0.6s;
+        margin-bottom: 15px;
+      }
+
+      .alert.success {background-color: #04AA6D;}
+      .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      /* The switch - the box around the slider */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      /* Hide default HTML checkbox */
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* The slider */
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      input:checked + .slider {
+        background-color: #2196F3;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+	  table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px;
+      }
+
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        background-color:lightgray;
+        padding: 8px;
+      }
+      @keyframes ldio-5ivethdrur {
+        0% { transform: rotate(0deg) }
+        50% { transform: rotate(22.5deg) }
+        100% { transform: rotate(45deg) }
+      }
+      .ldio-5ivethdrur > div {
+        transform-origin: 50px 50px;
+        animation: ldio-5ivethdrur 0.2s infinite linear;
+      }
+      .ldio-5ivethdrur > div div {
+          position: absolute;
+          width: 11px;
+          height: 76px;
+          background: #e15b64;
+          left: 50px;
+          top: 50px;
+          transform: translate(-50%,-50%);
+      }
+      .ldio-5ivethdrur > div div:nth-child(1) {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+      }
+      .ldio-5ivethdrur > div div:nth-child(6) {
+          width: 40px;
+          height: 40px;
+          background: #ffffff;
+          border-radius: 50%;
+      }.ldio-5ivethdrur > div div:nth-child(3) {
+        transform: translate(-50%,-50%) rotate(45deg)
+      }.ldio-5ivethdrur > div div:nth-child(4) {
+        transform: translate(-50%,-50%) rotate(90deg)
+      }.ldio-5ivethdrur > div div:nth-child(5) {
+        transform: translate(-50%,-50%) rotate(135deg)
+      }
+      .loadingio-spinner-gear-13tgugo7ucwi {
+        width: 46px;
+        height: 46px;
+        display: inline-block;
+        overflow: hidden;
+        background: #ffffff;
+      }
+      .ldio-5ivethdrur {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(0.46);
+        backface-visibility: hidden;
+        transform-origin: 0 0; /* see note above */
+      }
+      .ldio-5ivethdrur div { box-sizing: content-box; }
+    </style>
+{% endblock %}
+{% block content %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+<center><h1 class="display-4">{{ page.name_title }}</h1></center>
+<div>
+    <center><p>{{ page.name_subtitle|richtext }}</p></center>
+</div>
+
+<!-- Rounded switch -->
+<div>
+  <div style="display: inline; margin-right: 50%;">
+    <h2>Process video using GPU</h2>
+    <label class="switch">
+      <input type="checkbox" onclick="togglePuSwitch()">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <select name="model to process video" id="modelSelection" style="display: inline;"></select>
+</div>
+
+<center>
+  <div class="container-fluid" style="height:100%; padding-top:3%; display: block;">
+    <div class="row" style="padding-bottom:1%;">
+      <div class="col-4">
+        <button type="button" onclick="changeTheVariableStart()" id="pushMe3" class="btn btn-primary" name="button3">Start</button>
+      </div>
+      <div class="col-4">
+        <button type="button" onclick="takeVideoSnippet()" id="pushMe5" class="btn btn-primary" name="button5">Word Complete</button>
+      </div>
+      <div class="col-4">
+        <button type="button" onclick="changeTheVariableStop()" id="pushMe4" class="btn btn-primary" name="button4">Stop</button>
+      </div>
+    </div>
+    <!-- <h4>If video does not load, click the below buttons:</h4>
+      <center>
+        <div style="margin-bottom:10px;">
+          <a type="button" id="ntbtn1" href="../no_video/" target="_blank" class="btn btn-primary" name="button" style="color:white">View in new tab</a>
+        </div>
+      </center> -->
+
+    <div class="alert success" style="display: none;">
+      <span class="closebtn">&times;</span>  
+      <strong>Success!</strong> Web cam snippet created.
+    </div>
+    <div class="videoWrapper">
+        <style>
+        .videoWrapper {
+          position=absolute;
+          height=100%;
+        }
+        .videoWrapper iframe {
+          display: inline;
+          height: 450px; width: 790px; border: 2px solid #ccc;
+          margin-bottom:200px;
+          position: relative;
+        }
+      </style>
+
+      <!-- <img id="frame1" style="-webkit-user-select: none;" src="../no_video/" width="800px" height="700px"> -->
+      <iframe id="frame1" class="responsive-iframe"  src="../no_video/" title="YouTube video player" frameborder="0" scrolling="no" ></iframe>
+
+    </div>
+
+	<h1>Webcam Video Workflows</h1>
+	<div id="videoWorkflows"></div>
+	<h1>Webcam Video Results</h1>
+	<div id="videoResults"></div>
+
+	<br><br>
+    
+    <br>
+    <div>
+      <h2>Transcript</h2>
+      <form>
+        <textarea type="text" id="predictedWords" style="width: 80%; height: 300px;" disabled></textarea>
+      </form><br>
+      <button id="transcriptNotCorrect" onclick="toggleDisplayGroundTruth()">Transcript not correct?</button>
+	  <button id="exportTranscript" onclick="exportTranscript()">Export Transcript</button><br><br>
+      <div id="groundTruthDisplay" style="display:None;">
+        <h2>Ground Truth</h2>
+        <form>
+          <textarea type="text" id="groundTruth" style="width: 80%; height: 300px;"></textarea>
+        </form>
+        <button>Submit corrected transcript</button>
+        <button onclick="toggleDisplayGroundTruth()">Hide ground truth form</button><br><br>
+      </div>
+    </div>
+</div>
+</center>
+
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+	  const VIDEO_WORKFLOW_STATUS = {
+		NOT_STARTED: 1,
+		PENDING: 2,
+		IN_PROGRESS: 3,
+		COMPLETED: 4
+	  };
+      var puType = 0;
+      var close = document.getElementsByClassName("closebtn");
+      var i;
+      var modelConfigurations = {};
+	  var videoStatuses = {};
+      var videoResults = {};
+
+      for (i = 0; i < close.length; i++) {
+        close[i].onclick = function(){
+          var div = this.parentElement;
+          div.style.opacity = "0";
+          setTimeout(function(){ div.style.display = "none"; }, 600);
+        }
+      }
+      function togglePuSwitch() {
+        puType = puType == 0 ? 1 : 0;
+        if (puType === 0) {
+          console.log("Using CPU");
+        } else {
+          console.log("Using GPU")
+        }
+      }
+	  function updateTables() {
+        let videoWorkflowElement = document.getElementById("videoWorkflows");
+        let workflowTable =`
+        <table>
+          <tr>
+            <th>Progress</th>
+            <th>File Name</th>
+          </tr>
+        `;
+
+        for (const videoFileName in videoStatuses) {
+          workflowTable = workflowTable + '<tr>';
+          videoStatus = videoStatuses[videoFileName];
+          switch (videoStatus) {
+            case VIDEO_WORKFLOW_STATUS.NOT_STARTED:
+              workflowTable = workflowTable + '<td>' + '<img src = "/media/images/notStarted.svg" width=50px height=50px alt="Not Started SVG"/>' + '</td>';
+              break;
+            case VIDEO_WORKFLOW_STATUS.PENDING:
+              workflowTable = workflowTable + '<td>' + '<img src = "/media/images/notStarted.svg" width=50px height=50px alt="Not Started SVG"/>' + '</td>';
+              break;
+            case VIDEO_WORKFLOW_STATUS.IN_PROGRESS:
+              workflowTable = workflowTable + '<td>' + 
+                '<div class="loadingio-spinner-gear-13tgugo7ucwi"><div class="ldio-5ivethdrur">' + 
+                '<div><div></div><div></div><div></div><div></div><div></div><div></div></div></div></div>' + 
+                '</td>';
+              break;
+            case VIDEO_WORKFLOW_STATUS.COMPLETED:
+              workflowTable = workflowTable + '<td>' + '<img src = "/media/images/complete.svg" width=50px height=50px alt="Complete SVG"/>' + '</td>';
+              break;
+          }
+          workflowTable = workflowTable + '<td>' + videoFileName + '</td>';
+          workflowTable = workflowTable + '</tr>';
+        };
+
+          workflowTable = workflowTable + '</table>'
+
+        //changing the content in your element
+        videoWorkflowElement.innerHTML = workflowTable;
+
+        let videoResultsElement = document.getElementById("videoResults");
+        let resultTable =`
+        <table>
+          <tr>
+            <th>File Name</th>
+            <th>Model Confidence</th>
+            <th>Prediction</th>
+          </tr>
+        `;
+
+        for (const videoFileName in videoStatuses) {
+          if (videoStatuses[videoFileName] === VIDEO_WORKFLOW_STATUS.COMPLETED) {
+              resultTable = resultTable + '</tr>';
+              resultTable = resultTable + '<td>' + videoFileName + '</td>';
+              confidenceAndPrediction = videoResults[videoFileName];
+              resultTable = resultTable + '<td>' + confidenceAndPrediction.confidence + '</td>';
+              resultTable = resultTable + '<td>' + confidenceAndPrediction.prediction + '</td>';
+              resultTable = resultTable + '</tr>';
+          } else {
+            resultTable = resultTable + '</tr>';
+            resultTable = resultTable + '<td>' + videoFileName + '</td>';
+            confidenceAndPrediction = videoResults[videoFileName];
+            resultTable = resultTable + '<td>' + '-' + '</td>';
+            resultTable = resultTable + '<td>' + '-' + '</td>';
+            resultTable = resultTable + '</tr>';
+          }
+        };
+
+          resultTable = resultTable + '</table>'
+
+        //changing the content in your element
+        videoResultsElement.innerHTML = resultTable;
+      }
+      function changeTheVariableStart() {
+         var iframevar1 = document.getElementById('frame1');
+         var nt1 = document.getElementById('ntbtn1');
+         var a = "../camera_feed/";
+         iframevar1.src = a;
+         nt1.href = a;
+      }
+      function takeVideoSnippet() {
+        fetch('../take_snippet/').then(
+          (response) => {
+            var close = document.getElementsByClassName("closebtn");
+            var i;
+
+            for (i = 0; i < close.length; i++) {
+              var alert = close[i];
+              var parentElement = alert.parentElement;
+              parentElement.style.opacity = "1";
+              parentElement.style.display = "block";
+              setTimeout(function(){ parentElement.style.display = "none"; }, 3000);
+              alert.onclick = function(){
+                parentElement.style.opacity = "0";
+                setTimeout(function(){ div.style.display = "none"; }, 600);
+              }
+            }
+            return response.json();
+          }
+        ).then(
+          (jsonResponse) => {
+            const videoName = jsonResponse.videoName;
+			videoStatuses[videoName] = VIDEO_WORKFLOW_STATUS.IN_PROGRESS;
+            updateTables();
+            var modelSelectionElement = document.getElementById('modelSelection');
+            var modelSelection = modelSelectionElement.value;
+            var modelFilePath = modelConfigurations[modelSelection].modelName;
+            var configFilePath = modelConfigurations[modelSelection].configFile;
+            var wordListPath = modelConfigurations[modelSelection].wordsList;
+            var numClasses = modelConfigurations[modelSelection].numClasses;
+            return fetch('../predict_video/' + puType + '/' + numClasses + '/' + modelFilePath + '/' + configFilePath + '/' + wordListPath +'/' + videoName).then((predictedOccurancesAndConfidence) => predictedOccurancesAndConfidence.json());
+          }
+        ).then(
+          (predictedJsonResponse) => {
+            const videoName = predictedJsonResponse.videoName;
+            const confidence = predictedJsonResponse.confidence;
+            const prediction = predictedJsonResponse.prediction;
+			
+			videoResults[videoName] = {
+              confidence,
+              prediction
+            };
+
+            videoStatuses[videoName] = VIDEO_WORKFLOW_STATUS.COMPLETED;
+            updateTables();
+
+            // console.log(confidence, prediction);
+            var transcript = document.getElementById('predictedWords');
+            transcript.value = transcript.value + prediction + ' ';
+          }
+        );
+      }
+
+      function changeTheVariableStop() {
+         var iframevar1 = document.getElementById('frame1');
+         var nt1 = document.getElementById('ntbtn1');
+         var a = "../no_video/";
+         iframevar1.src = a;
+         nt1.href = a;
+      }
+      function toggleDisplayGroundTruth() {
+        var groundTruthDiv = document.getElementById('groundTruthDisplay');
+        if (groundTruthDiv.style.display === "none") {
+          groundTruthDiv.style.display = "block";
+        } else {
+          groundTruthDiv.style.display = "none";
+        }
+      }
+	  
+	  function exportTranscript() {
+        var transcript = document.getElementById('predictedWords');
+
+        var hiddenElement = document.createElement('a');
+
+        hiddenElement.href = 'data:attachment/text,' + encodeURI(transcript.value);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'transcript.txt';
+        hiddenElement.click();
+      }
+
+      window.onload = function() {
+        var modelSelectionElement = document.getElementById('modelSelection');
+        var modelSelectionOptions = '';
+        fetch('../get_model_info')
+          .then((res) => res.json())
+          .then((resJson) => JSON.parse(resJson))
+          .then(
+            (modelConfig) => {
+              modelConfig.models.forEach((config) => {
+                modelConfigurations[config.modelName] = config;
+                modelSelectionOptions = modelSelectionOptions + 
+                  '<option value="' + 
+                  config.modelName + 
+                  '">' +
+                  config.displayName +
+                  '</option>';
+              });
+              modelSelectionElement.innerHTML = modelSelectionOptions;
+            }
+          );
+      }
+    </script>
+{% endblock %}

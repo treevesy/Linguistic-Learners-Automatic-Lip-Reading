@@ -1,0 +1,595 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% block extra_css %}
+    <style>
+      body{
+        padding-top: 100px;
+      }
+      .alert {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        opacity: 1;
+        transition: opacity 0.6s;
+        margin-bottom: 15px;
+      }
+
+      .alert.success {background-color: #04AA6D;}
+      .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      /* The switch - the box around the slider */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      /* Hide default HTML checkbox */
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* The slider */
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      input:checked + .slider {
+        background-color: #2196F3;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px;
+      }
+
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        background-color:lightgray;
+        padding: 8px;
+      }
+      @keyframes ldio-5ivethdrur {
+        0% { transform: rotate(0deg) }
+        50% { transform: rotate(22.5deg) }
+        100% { transform: rotate(45deg) }
+      }
+      .ldio-5ivethdrur > div {
+        transform-origin: 50px 50px;
+        animation: ldio-5ivethdrur 0.2s infinite linear;
+      }
+      .ldio-5ivethdrur > div div {
+          position: absolute;
+          width: 11px;
+          height: 76px;
+          background: #e15b64;
+          left: 50px;
+          top: 50px;
+          transform: translate(-50%,-50%);
+      }
+      .ldio-5ivethdrur > div div:nth-child(1) {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+      }
+      .ldio-5ivethdrur > div div:nth-child(6) {
+          width: 40px;
+          height: 40px;
+          background: #ffffff;
+          border-radius: 50%;
+      }.ldio-5ivethdrur > div div:nth-child(3) {
+        transform: translate(-50%,-50%) rotate(45deg)
+      }.ldio-5ivethdrur > div div:nth-child(4) {
+        transform: translate(-50%,-50%) rotate(90deg)
+      }.ldio-5ivethdrur > div div:nth-child(5) {
+        transform: translate(-50%,-50%) rotate(135deg)
+      }
+      .loadingio-spinner-gear-13tgugo7ucwi {
+        width: 46px;
+        height: 46px;
+        display: inline-block;
+        overflow: hidden;
+        background: #ffffff;
+      }
+      .ldio-5ivethdrur {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(0.46);
+        backface-visibility: hidden;
+        transform-origin: 0 0; /* see note above */
+      }
+      .ldio-5ivethdrur div { box-sizing: content-box; }
+    </style>
+{% endblock %}
+{% block content %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+<center><h1 class="display-4">{{ page.name_title }}</h1></center>
+<div>
+    <center><p>{{ page.name_subtitle|richtext }}</p></center>
+</div>
+
+<!-- Rounded switch -->
+<div>
+  <div style="margin-right: 50%;">
+    <h2>Process video using GPU</h2>
+    <label class="switch">
+      <input type="checkbox" onclick="togglePuSwitch()">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <select name="model to process video" id="modelSelection"></select>
+</div>
+
+<center>
+  <div class="container-fluid" style="height:100%; padding-top:3%; display: block; overflow: auto;">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <style>
+      .file-drop-area {
+          position: relative;
+          display: flex;
+          align-items: center;
+          max-width: 100%;
+          padding: 25px;
+          border: 1px dashed rgba(255, 255, 255, 0.4);
+          border-radius: 3px;
+          transition: .2s
+        }
+
+      .choose-file-button {
+          flex-shrink: 0;
+          /* background-color: rgba(255, 255, 255, 0.04); */
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 3px;
+          padding: 8px 15px;
+          margin-right: 10px;
+          font-size: 12px;
+          text-transform: uppercase
+        }
+
+      .file-message {
+          font-size: small;
+          font-weight: 300;
+          line-height: 1.4;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis
+        }
+
+      .file-input {
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          widows: 100%;
+          cursor: pointer;
+          opacity: 0
+        }
+        
+    </style>
+    <script type="text/javascript">
+      $(document).on(
+        'change', 
+        '.file-input', 
+        function() {
+          var filesCount = $(this)[0].files.length;
+          var textbox = $(this).prev();
+          if (filesCount === 1) {
+            var fileName = $(this).val().split('\\').pop();
+            textbox.text(fileName);
+          } else {
+            textbox.text(filesCount + ' files selected');
+          }
+          if (typeof (FileReader) != "undefined") {
+            console.log('reading file');
+            var dvPreview = $("#divImageMediaPreview");
+            dvPreview.html("");
+            var index =0;
+            
+            $($(this)[0].files).each(
+              function () {
+                var file = $(this);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                  var vid = $("<video />");
+                  vid.attr("style", "width: 150px; height:100px; padding: 10px");
+                  vid.attr("src", e.target.result);
+                  vid.attr("name", name + index);
+                  index = index + 1;
+                  dvPreview.append(vid);
+                }
+                reader.readAsDataURL(file[0]);
+              }
+            );
+          } else {
+            alert("This browser does not support HTML5 FileReader.");
+          }
+        }
+      );
+    </script>
+
+    <form class="input-group mb-3" method="POST" enctype="multipart/form-data" id="form1">
+          <div class="file-drop-area"> <span class="choose-file-button btn-primary">Choose Files</span> <span class="file-message">or drag and drop files here</span> <input type="file" name="file_data" class="file-input" accept=".mp4" multiple> </div>
+          {% csrf_token %}
+          <div class="container-fluid p-2">
+                <button class="btn btn-primary" type="submit" onclick="createTables()" id="inputGroupFileAddon04">Upload</button>
+          </div>
+    </form>
+    <h6>List of selected/uploaded files <span style="font-style: italic">(click to open in new tab)</span>: </h6>
+    
+    <ul>
+      {% for my_file1 in my_uploaded_file_names %}
+        <li class="text-white"><a class="text-black" href="{{my_file1}}" target="_blank" style="text-decoration:none;">{{my_file1}}</a></li>
+      {% endfor %}
+    </ul>
+<br><br><br>
+
+</div>
+</center>
+
+<div class=" ">
+  <button class="btn btn-primary" onclick="processVideos()" type="submit" name="start" id="start">Start</button>
+</div><br><br>
+
+<h1>Video Workflows</h1>
+<div id="videoWorkflows"></div>
+<h1>Video Results</h1>
+<div id="videoResults"></div>
+
+<div class=" " style="margin-bottom:400px;">
+    <ul class="nav nav-tabs" id="myTab">
+      <li class="nav-item">
+        <a class="nav-link active" id="image-tab" data-toggle="tab" data-target="#home"  aria-controls="home">Raw Video</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="result-tab" data-toggle="tab" data-target="#result" aria-controls="result">Result Video</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="transcript-tab" data-toggle="tab" data-target="#transcript" aria-controls="transcript">Transcript</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="image-tab">
+        <br>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            {% for my_file in my_uploaded_file_names %}
+                  <h3>my_file</h3>
+                  <li data-target="#carouselExampleIndicators" data-slide-to={{forloop.counter0}} class="{% if forloop.first %} active {% endif %}" aria-current="true" aria-label={{forloop.counter}}></li>
+            {% endfor %}
+          </ol>
+          <div class="carousel-inner">
+            {% for my_file1 in my_uploaded_file_names %}
+                <!-- <div class="carousel-item {% if forloop.first %} active {% endif %} "> -->
+                <a href="{{my_file1}}" target="_blank"><video src="{{my_file1}}" class="d-block w-100"></a>
+                <!-- <img src="{{my_file1}}" class="d-block w-100"> -->
+                <!-- </div> -->
+            {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="result" role="tabpanel" aria-labelledby="result-tab">
+        <!-- This is result images. -->
+        <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            {% for my_file2 in my_result_file_names %}
+                  <li data-target="#carouselExampleIndicators2" data-slide-to={{forloop.counter0}} class="{% if forloop.first %} active {% endif %}" aria-current="true" aria-label={{forloop.counter}}></li>
+            {% endfor %}
+          </ol>
+          <div class="carousel-inner">
+            {% for my_file3 in my_result_file_names %}
+                <div class="carousel-item {% if forloop.first %} active {% endif %} ">
+                  <a href="{{my_file3}}" target="_blank"><video src="{{my_file3}}" class="d-block w-100"></a>
+                </div>
+            {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="transcript" role="tabpanel" aria-labelledby="transcript-tab">
+        <!-- This is transcript. -->
+        <br>
+        <div>
+          <h2>Transcript</h2>
+          <form>
+            <textarea type="text" id="predictedWords" style="width: 80%; height: 300px;" disabled></textarea>
+          </form><br>
+          <button id="transcriptNotCorrect" onclick="toggleDisplayGroundTruth()" style="margin-right: 50%">Transcript not correct?</button>
+          <button id="exportTranscript" onclick="exportTranscript()">Export Transcript</button><br><br>
+          <div id="groundTruthDisplay" style="display:None;">
+            <h2>Ground Truth</h2>
+            <form>
+              <textarea type="text" id="predictedWords" style="width: 80%; height: 300px;"></textarea>
+            </form>
+            <button>Submit corrected transcript</button>
+            <button onclick="toggleDisplayGroundTruth()">Hide ground truth form</button><br><br>
+          </div>
+        </div>
+        <!-- <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            {% for my_file2 in my_result_file_names %}
+                  <li data-target="#carouselExampleIndicators2" data-slide-to={{forloop.counter0}} class="{% if forloop.first %} active {% endif %}" aria-current="true" aria-label={{forloop.counter}}></li>
+            {% endfor %}
+          </ol>
+          <div class="carousel-inner">
+            {% for my_file3 in my_result_file_names %}
+                <div class="carousel-item {% if forloop.first %} active {% endif %} ">
+                  <a href="{{my_file3}}" target="_blank"><img src="{{my_file3}}" class="d-block w-100"></a>
+                </div>
+            {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div> -->
+      </div>
+    </div>
+</div>
+
+{{ my_uploaded_file_names|json_script:"my_uploaded_file_names" }}
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+      const VIDEO_WORKFLOW_STATUS = {
+        NOT_STARTED: 1,
+        PENDING: 2,
+        IN_PROGRESS: 3,
+        COMPLETED: 4
+      };
+
+      var puType = 0;
+      var my_uploaded_file_names = JSON.parse(document.getElementById('my_uploaded_file_names').textContent);
+      var videoStatuses = {};
+      var videoResults = {};
+      var modelConfigurations = {};
+
+      function toggleDisplayGroundTruth() {
+        var groundTruthDiv = document.getElementById('groundTruthDisplay');
+        if (groundTruthDiv.style.display === "none") {
+          groundTruthDiv.style.display = "block";
+        } else {
+          groundTruthDiv.style.display = "none";
+        }
+        // var transcript = document.getElementById('predictedWords');
+        // transcript.value = 'ABOUT';
+      }
+
+      function togglePuSwitch() {
+        puType = puType == 0 ? 1 : 0;
+        if (puType === 0) {
+          console.log("Using CPU");
+        } else {
+          console.log("Using GPU")
+        }
+      }
+
+      function updateTables() {
+        let videoWorkflowElement = document.getElementById("videoWorkflows");
+        let workflowTable =`
+        <table>
+          <tr>
+            <th>Progress</th>
+            <th>File Name</th>
+          </tr>
+        `;
+
+        for (const videoFileName in videoStatuses) {
+          workflowTable = workflowTable + '<tr>';
+          videoStatus = videoStatuses[videoFileName];
+          switch (videoStatus) {
+            case VIDEO_WORKFLOW_STATUS.NOT_STARTED:
+              workflowTable = workflowTable + '<td>' + '<img src = "/media/images/notStarted.svg" width=50px height=50px alt="Not Started SVG"/>' + '</td>';
+              break;
+            case VIDEO_WORKFLOW_STATUS.PENDING:
+              workflowTable = workflowTable + '<td>' + '<img src = "/media/images/notStarted.svg" width=50px height=50px alt="Not Started SVG"/>' + '</td>';
+              break;
+            case VIDEO_WORKFLOW_STATUS.IN_PROGRESS:
+              workflowTable = workflowTable + '<td>' + 
+                '<div class="loadingio-spinner-gear-13tgugo7ucwi"><div class="ldio-5ivethdrur">' + 
+                '<div><div></div><div></div><div></div><div></div><div></div><div></div></div></div></div>' + 
+                '</td>';
+              break;
+            case VIDEO_WORKFLOW_STATUS.COMPLETED:
+              workflowTable = workflowTable + '<td>' + '<img src = "/media/images/complete.svg" width=50px height=50px alt="Complete SVG"/>' + '</td>';
+              break;
+          }
+          workflowTable = workflowTable + '<td>' + videoFileName + '</td>';
+          workflowTable = workflowTable + '</tr>';
+        };
+
+        workflowTable = workflowTable + '</table>'
+
+        //changing the content in your element
+        videoWorkflowElement.innerHTML = workflowTable;
+
+        let videoResultsElement = document.getElementById("videoResults");
+        let resultTable =`
+        <table>
+          <tr>
+            <th>File Name</th>
+            <th>Model Confidence</th>
+            <th>Prediction</th>
+          </tr>
+        `;
+
+        for (const videoFileName in videoStatuses) {
+          if (videoStatuses[videoFileName] === VIDEO_WORKFLOW_STATUS.COMPLETED) {
+              resultTable = resultTable + '</tr>';
+              resultTable = resultTable + '<td>' + videoFileName + '</td>';
+              confidenceAndPrediction = videoResults[videoFileName];
+              resultTable = resultTable + '<td>' + confidenceAndPrediction.confidence + '</td>';
+              resultTable = resultTable + '<td>' + confidenceAndPrediction.prediction + '</td>';
+              resultTable = resultTable + '</tr>';
+          } else {
+            resultTable = resultTable + '</tr>';
+            resultTable = resultTable + '<td>' + videoFileName + '</td>';
+            confidenceAndPrediction = videoResults[videoFileName];
+            resultTable = resultTable + '<td>' + '-' + '</td>';
+            resultTable = resultTable + '<td>' + '-' + '</td>';
+            resultTable = resultTable + '</tr>';
+          }
+        };
+
+          resultTable = resultTable + '</table>'
+
+        //changing the content in your element
+        videoResultsElement.innerHTML = resultTable;
+      }
+
+      function processVideos() {
+        var modelSelectionElement = document.getElementById('modelSelection');
+        var modelSelection = modelSelectionElement.value;
+        var modelFilePath = modelConfigurations[modelSelection].modelName;
+        var configFilePath = modelConfigurations[modelSelection].configFile;
+        var wordListPath = modelConfigurations[modelSelection].wordsList;
+        var numClasses = modelConfigurations[modelSelection].numClasses;
+        my_uploaded_file_names.forEach((videoFilePath) => videoStatuses[videoFilePath] = VIDEO_WORKFLOW_STATUS.PENDING);
+        updateTables();
+        my_uploaded_file_names.forEach(
+          (videoFilePath) => {
+            videoStatuses[videoFilePath] = VIDEO_WORKFLOW_STATUS.IN_PROGRESS;
+            updateTables();
+            return fetch('../predict_video/' + puType + '/' + numClasses + '/' + modelFilePath + '/' + configFilePath + '/' + wordListPath +'/' + videoFilePath.replace('\\', '/').substring(1)).then(
+              (predictedOccurancesAndConfidence) => predictedOccurancesAndConfidence.json()).then(
+              (predictedJsonResponse) => {
+                const prediction = predictedJsonResponse.prediction;
+                const confidence = predictedJsonResponse.confidence;
+
+                videoResults[videoFilePath] = {
+                  confidence,
+                  prediction
+                };
+
+                videoStatuses[videoFilePath] = VIDEO_WORKFLOW_STATUS.COMPLETED;
+                updateTables();
+
+                var transcript = document.getElementById('predictedWords');
+                transcript.value = transcript.value + prediction + ' ' ;
+              }
+            );
+          }
+        );
+      }
+
+      function exportTranscript() {
+        var transcript = document.getElementById('predictedWords');
+
+        var hiddenElement = document.createElement('a');
+
+        hiddenElement.href = 'data:attachment/text,' + encodeURI(transcript.value);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'transcript.txt';
+        hiddenElement.click();
+      }
+
+      window.onload = function() {
+        var modelSelectionElement = document.getElementById('modelSelection');
+        var modelSelectionOptions = '';
+        fetch('../get_model_info')
+          .then((res) => res.json())
+          .then((resJson) => JSON.parse(resJson))
+          .then(
+            (modelConfig) => {
+              modelConfig.models.forEach((config) => {
+                modelConfigurations[config.modelName] = config;
+                modelSelectionOptions = modelSelectionOptions + 
+                  '<option value="' + 
+                  config.modelName + 
+                  '">' +
+                  config.displayName +
+                  '</option>';
+              });
+              modelSelectionElement.innerHTML = modelSelectionOptions;
+            }
+          );
+
+        if (my_uploaded_file_names.length !== 0) {
+          my_uploaded_file_names.map((fileName) => videoStatuses[fileName] = VIDEO_WORKFLOW_STATUS.NOT_STARTED);
+        } 
+
+        updateTables();
+      }
+    </script>
+{% endblock %}
